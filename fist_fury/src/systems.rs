@@ -516,7 +516,7 @@ pub fn end_game(
     if f2.health == 0.0 && winner.player_two == false{
         winner.player_one = true;
         commands.spawn(SpriteBundle {
-            texture: asset_server.load("scenes/f2_wins.png"),
+            texture: asset_server.load("scenes/f1_wins.png"),
             transform: Transform { 
                 translation: Vec3{ x: 0.0, y: 0.0, z: 2.0 },
                 scale: Vec3 {x:0.5, y: 0.5, z:0.0}, 
@@ -529,7 +529,7 @@ pub fn end_game(
     if f1.health == 0.0 && winner.player_one == false{
         winner.player_two = true;
         commands.spawn(SpriteBundle {
-            texture: asset_server.load("scenes/f1_wins.png"),
+            texture: asset_server.load("scenes/f2_wins.png"),
             transform: Transform { 
                 translation: Vec3{ x: 0.0, y: 0.0, z: 2.0 },
                 scale: Vec3 {x:0.5, y: 0.5, z:0.0}, 
