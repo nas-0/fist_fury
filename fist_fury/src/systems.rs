@@ -1,16 +1,21 @@
 use bevy::prelude::*;
 use crate::components::*;
 
+use std::thread;
+use std::time::Duration;
+
+
 pub fn setup_game(mut commands: Commands, asset_server: Res<AssetServer>){
 
     commands.spawn(Camera2dBundle::default()); // Spawning Camera
 
     commands
-        .spawn(SpriteBundle{
+        .spawn((SpriteBundle{
             texture: asset_server.load("backgrounds/forest.png"), //Adding background to Screen
             ..default()
-        });
-
+        },
+        WhoWon{player_one: false, player_two: false})
+    );
 }
 
 
@@ -363,7 +368,7 @@ pub fn collision(
             if f2.health <= 0.0 {
                 println!("Player 1 has won!");
 
-                std::process::exit(1);
+                // std::process::exit(1);
             }
         }
         
@@ -380,7 +385,6 @@ pub fn collision(
             // fighter_sprite.index = 0;
             if f1.health <= 0.0 {
                 println!("Player 2 has won!");
-                std::process::exit(1);
             }
         }
 
@@ -497,3 +501,41 @@ pub fn change_health_bar (
 
 }
 
+pub fn end_game(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    mut fighter2_query: Query<&mut Fighter2, (With<Fighter2>,Without<Fighter1>)>,
+    mut fighter1_query: Query<&mut Fighter1, (With<Fighter1>,Without<Fighter2>)>,
+    mut winner_query: Query<&mut WhoWon>,
+) {
+    let mut winner = winner_query.single_mut();
+    
+    let f1 = fighter1_query.single_mut();
+    let f2 = fighter2_query.single_mut();
+
+    if f2.health == 0.0 && winner.player_two == false{
+        winner.player_one = true;
+        commands.spawn(SpriteBundle {
+            texture: asset_server.load("scenes/f2_wins.png"),
+            transform: Transform { 
+                translation: Vec3{ x: 0.0, y: 0.0, z: 2.0 },
+                scale: Vec3 {x:0.5, y: 0.5, z:0.0}, 
+                ..default()
+            },
+            ..default()
+        });
+    }
+
+    if f1.health == 0.0 && winner.player_one == false{
+        winner.player_two = true;
+        commands.spawn(SpriteBundle {
+            texture: asset_server.load("scenes/f1_wins.png"),
+            transform: Transform { 
+                translation: Vec3{ x: 0.0, y: 0.0, z: 2.0 },
+                scale: Vec3 {x:0.5, y: 0.5, z:0.0}, 
+                ..default()
+            },
+            ..default()
+        });
+    }
+}

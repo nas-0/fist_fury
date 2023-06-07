@@ -40,3 +40,9 @@ pub struct MoveRight {
 pub struct LightAttack {
     pub has_started : bool,
 }
+
+#[derive(Component)]
+pub struct WhoWon {
+    pub player_one : bool,
+    pub player_two: bool
+}

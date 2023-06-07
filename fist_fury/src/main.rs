@@ -27,6 +27,7 @@ fn main() {
     .add_system(fighter_2_movement)
     .add_system(collision)
     .add_system(change_health_bar)
+    .add_system(end_game)
     .run()
 }
 
