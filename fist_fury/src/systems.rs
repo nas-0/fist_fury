@@ -1,11 +1,5 @@
 use bevy::prelude::*;
-
-
 use crate::components::*;
-
-// #[derive(Component, Deref, DerefMut)]
-// struct AnimationTimer(Timer);
-
 
 pub fn setup_game(mut commands: Commands, asset_server: Res<AssetServer>){
 
@@ -18,38 +12,6 @@ pub fn setup_game(mut commands: Commands, asset_server: Res<AssetServer>){
         });
 
 }
-
-
-// pub fn spawn_fighters (mut commands: Commands, asset_server: Res<AssetServer>) {
-//     //Spawning Fighter 1
-//     // commands.spawn(( 
-//     //     SpriteBundle{
-//     //         transform: Transform::from_xyz(-200.0, -70.0, 0.0), // Assigns Translation of fighter 1 (spawn point coords)
-//     //         texture: asset_server.load("sprites/characters/man_with_hat.png"),
-//     //         ..default()
-//     //     },
-//     //     Fighter1{
-//     //         health: 100.0,}
-//     //     )
-//     // );
-
-//     //Spawn Fighter 2
-//     // commands.spawn((
-
-//     //     SpriteBundle{
-//     //         transform: Transform::from_xyz(200.0, -70.0, 0.0), // Assigns Translation of fighter 1 (spawn point coords)
-//     //         texture: asset_server.load("sprites/characters/man_with_mustache.png"),
-//     //         sprite: Sprite { 
-//     //             flip_x: true,
-//     //                 flip_y: false,
-//     //                 ..default()}, 
-//     //             ..default()},
-//     //     Fighter2{
-//     //         health: 100.0}
-//     //     ),
-//     // );
-// }
-
 
 
 pub fn spawn_fighter_2(
@@ -152,13 +114,8 @@ pub fn spawn_fighter_1(
 
 }
 
-
-
-
-
 // This controls the movement for the fighter on the Left
 pub fn fighter_1_movement(
-    // mut fighter_position: Query<&mut Transform, With<Fighter1>>, 
     keyboard: Res<Input<KeyCode>>,
     time: Res<Time>,
     mut query: Query<(
@@ -174,20 +131,8 @@ pub fn fighter_1_movement(
 ) {
     let fighter2_position = fighter_position2.single();
 
-    // for mut transform in &mut fighter_position {
-    //     println!("Fighter 1: {}", transform.translation.x);
-    //     //The 'and' in this if statement limits Fighter 1 from going past fighter 2
-    //     if keyboard.pressed(KeyCode::D) && transform.translation.x < fighter2_position.translation.x -18.5{
-    //         transform.translation.x += 1.0;
-    //     }
-
-    //     if keyboard.pressed(KeyCode::A) {
-    //         transform.translation.x -= 1.0;
-    //     }
-    // }
     for (mut timer, mut sprite, mut sprite_transform, mut light_attack, mut move_right, mut move_left,mut idle_movement) in &mut query {
-        // println!("Current index is {}", sprite.index);
-        println!("Fighter 1: {}", sprite_transform.translation.x);
+
         timer.tick(time.delta());
         
         if !light_attack.has_started && keyboard.just_pressed (KeyCode::G) {
@@ -207,7 +152,6 @@ pub fn fighter_1_movement(
         // If the attack animation component is set to true the animation goes
         if light_attack.has_started {
           if timer.just_finished() {
-              //count = count + 1;
               if sprite.index > 5 || sprite.index < 0 {
                     sprite.index = 0;
               }else if sprite.index == 5 {
@@ -222,13 +166,12 @@ pub fn fighter_1_movement(
             if keyboard.pressed(KeyCode::D){
                 
                 if timer.just_finished() {
-                    //count = count + 1;
+
                     if sprite.index > 47 || sprite.index < 40 {
                         sprite.index = 40;
                     }else if sprite.index == 47 {
                         sprite.index = 40;
-                        // move_right.has_started = false;
-                        // idle_movement.has_started = true;
+
                     } else {
                         sprite.index +=1;
                         if sprite_transform.translation.x < fighter2_position.translation.x - 18.5{
@@ -247,13 +190,10 @@ pub fn fighter_1_movement(
             if keyboard.pressed(KeyCode::A) {
                 
                 if timer.just_finished() {
-                    //count = count + 1;
                     if sprite.index > 47 || sprite.index < 40 {
                         sprite.index = 47;
                     }else if sprite.index == 40 {
                         sprite.index = 47;
-                        // move_right.has_started = false;
-                        // idle_movement.has_started = true;
                     } else {
                         sprite.index -=1;
                         if sprite_transform.translation.x >= -270.0{
@@ -287,10 +227,6 @@ pub fn fighter_1_movement(
 //This controls the movement for the fighter on the right
 pub fn fighter_2_movement(
     fighter_position1: Query<&Transform, (With<Fighter1>, Without<Fighter2>)>,
-    // mut fighter_position: Query<&mut Transform, With<Fighter2>>,
-    // mut fighter_sprite_query: Query<&TextureAtlasSprite, With<Fighter2>>,
-    // assets: Res<AssetServer>,
-    // fighter2_query: Query<&Transform, (With<Fighter1>, Without<Fighter2>)>,
     keyboard: Res<Input<KeyCode>>,
     time: Res<Time>,
     mut query: Query<(
@@ -304,26 +240,9 @@ pub fn fighter_2_movement(
     ), With<Fighter2>>,
 ) {
     let fighter1_position = fighter_position1.single();
-    // let fighter2_position = fighter2_query.single();
-    // let mut fighter_sprite = fighter_sprite_query.single_mut();
-
-
-
-    // for mut transform in &mut fighter_position {
-        
-    //     //The 'and' in this if statement limits Fighter 2 from going past fighter 1
-    //     if keyboard.pressed(KeyCode::Left) && transform.translation.x > fighter2_position.translation.x + 18.5 {
-    //         transform.translation.x -= 1.0;
-    //     }
-
-    //     if keyboard.pressed(KeyCode::Right) {
-    //         transform.translation.x += 1.0;
-    //     }
-    // }
-
+ 
     for (mut timer, mut sprite, mut sprite_transform, mut light_attack, mut move_right, mut move_left,mut idle_movement) in &mut query {
-        // println!("Current index is {}", sprite.index);
-        //println!("Fighter 2: {}", sprite.index);
+
         timer.tick(time.delta());
         
         if !light_attack.has_started && keyboard.just_pressed (KeyCode::L) {
@@ -343,7 +262,7 @@ pub fn fighter_2_movement(
         // If the attack animation component is set to true the animation goes
         if light_attack.has_started {
           if timer.just_finished() {
-              //count = count + 1;
+
               if sprite.index > 3 || sprite.index < 0 {
                     sprite.index = 0;
               }else if sprite.index == 3 {
@@ -358,13 +277,12 @@ pub fn fighter_2_movement(
             if keyboard.pressed(KeyCode::Right){
                 
                 if timer.just_finished() {
-                    //count = count + 1;
+
                     if sprite.index > 55 || sprite.index < 48 {
                         sprite.index = 55;
                     }else if sprite.index == 48 {
                         sprite.index = 55;
-                        // move_right.has_started = false;
-                        // idle_movement.has_started = true;
+
                     } else {
                         sprite.index -=1;
                         if sprite_transform.translation.x <= 270.0{
@@ -383,13 +301,12 @@ pub fn fighter_2_movement(
             if keyboard.pressed(KeyCode::Left) {
                 
                 if timer.just_finished() {
-                    //count = count + 1;
+
                     if sprite.index > 55 || sprite.index < 48 {
                         sprite.index = 48;
                     }else if sprite.index == 55 {
                         sprite.index = 48;
-                        // move_right.has_started = false;
-                        // idle_movement.has_started = true;
+
                     } else {
                         sprite.index +=1;
                         if sprite_transform.translation.x > fighter1_position.translation.x +18.5 {
@@ -436,17 +353,13 @@ pub fn collision(
     let mut f1 = fighter1_query.single_mut();
     let mut f2 = fighter2_query.single_mut();
 
-    // let mut fighter_sprite = fighter_sprite_query.single_mut();
-
     //Detects Collison when players are touching and Player 1 Clicks G
     if keyboard.just_released(KeyCode::G) {
-        println!("Player 1 attacks");
         
         // If the player presses the Attack button while touching the other player they inflict damage
         if fighter1_position.translation.x >= fighter2_position.translation.x - 170.0{
             f2.health -= 10.0;
-            println!("Player 1 attacked Player 2");
-            println!("Player 2 health: {}", f2.health);
+
             if f2.health <= 0.0 {
                 println!("Player 1 has won!");
 
@@ -459,20 +372,11 @@ pub fn collision(
 
     ////Detects Collison when players are touching and Player 2 Clicks SPACE
     if keyboard.just_released(KeyCode::L) {
-        println!("Player 2 attacks");
-
- 
-        // fighter_sprite.index = 2;
-
-        // fighter_sprite.index = 0;
-
-
 
         // If the player presses the Attack button while touching the other player they inflict damage
         if fighter2_position.translation.x <= fighter1_position.translation.x + 170.0 {
             f1.health -= 10.0;
-            println!("Player 2 attacks player 1");
-            println!("Player 1 health: {}", f1.health);
+
             // fighter_sprite.index = 0;
             if f1.health <= 0.0 {
                 println!("Player 2 has won!");
@@ -488,7 +392,6 @@ pub fn spawn_health_bar (
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
-    // let img_path = "sprites/healthbar_spritesheet.png".to_string();
     let img_path = "sprites/healthbars/healthbar_sprite_sheet.png".to_string();
     
     let texture_handle = asset_server.load(&img_path);
